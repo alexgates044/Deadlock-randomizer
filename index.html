@@ -1,390 +1,443 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deadlock Randomizer</title>
+
 <style>
-.result{
-    font-size:2rem;
-    font-weight:bold;
-    min-height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:20px 0;
-    transition:.1s;
-}
-.spinning{
-    animation:spinFlash .08s linear infinite;
-}
-@keyframes spinFlash{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.08);}
-    100%{transform:scale(1);}
-}
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-body{
-    min-height:100vh;
-    background:radial-gradient(circle at top, #1f2937, #0f172a 70%);
-    color:white;
-    font-family:'Segoe UI', sans-serif;
-    text-align:center;
-    padding:40px;
-}
-h1{
-    font-size:4rem;
-    margin-bottom:10px;
-    color:#4ade80;
-    text-shadow:0 0 10px #4ade80, 0 0 20px #4ade80;
-}
-.subtitle{
-    color:#94a3b8;
-    margin-bottom:40px;
-}
-.container{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    flex-wrap:wrap;
-}
-.section{
-    width:300px;
-    background:rgba(15,23,42,.9);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:20px;
-    padding:25px;
-    backdrop-filter:blur(8px);
-    box-shadow:0 0 25px rgba(0,0,0,.4);
-}
-.hero-card   { border-top:4px solid #4ade80; }
-.build-card  { border-top:4px solid #a855f7; }
-.souls-card  { border-top:4px solid #fb923c; }
-.item-card   { border-top:4px solid #38bdf8; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080c14;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh;}
+.nav{display:flex;gap:2px;padding:14px 16px 0;background:#080c14;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:10;}
+.nav-btn{padding:10px 22px;border:none;border-radius:10px 10px 0 0;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:.2s;background:transparent;color:#334155;border-bottom:2px solid transparent;}
+.nav-btn:hover{color:#64748b;background:rgba(255,255,255,.04);}
+.nav-btn.active-items{color:#38bdf8;border-bottom:2px solid #38bdf8;background:rgba(56,189,248,.07);}
+.nav-btn.active-build{color:#e2c96e;border-bottom:2px solid #e2c96e;background:rgba(226,201,110,.07);}
+.nav-btn.active-hero{color:#4ade80;border-bottom:2px solid #4ade80;background:rgba(74,222,128,.07);}
+.page{display:none;padding:30px 20px 48px;max-width:900px;margin:0 auto;}
+.page.active{display:block;}
+.page-title{font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px;letter-spacing:-.01em;}
+.page-sub{color:#334155;font-size:.8rem;text-align:center;margin-bottom:30px;letter-spacing:.04em;text-transform:uppercase;}
+.ti{color:#38bdf8;}.tb{color:#e2c96e;}.th{color:#4ade80;}
+.card{background:#0d1526;border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px 22px 20px;}
+.card-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+.card-sm{width:195px;flex-shrink:0;}
+.card-wide{width:100%;max-width:600px;}
+.card-full{width:100%;max-width:860px;margin:0 auto;}
+.card-label{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+.lbl-cyan{color:#0e7ba8;}.lbl-amber{color:#a05f10;}.lbl-purple{color:#7c3aed;}.lbl-green{color:#16803c;}
+.result{font-size:1.65rem;font-weight:800;min-height:48px;display:flex;align-items:center;justify-content:center;margin:6px 0 14px;letter-spacing:-.01em;}
+.rc{color:#38bdf8;}.ra{color:#fb923c;}.rg{color:#4ade80;}.rw{color:#fb923c;}.rv{color:#4ade80;}.rs{color:#a78bfa;}
+.btn{border:none;border-radius:10px;padding:9px 18px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;transition:.15s;display:inline-flex;align-items:center;gap:6px;}
+.btn:active{transform:scale(.97);}
+.btn-cyan{background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.2);}
+.btn-cyan:hover{background:#38bdf8;color:#080c14;}
+.btn-amber{background:rgba(251,146,60,.1);color:#fb923c;border:1px solid rgba(251,146,60,.2);}
+.btn-amber:hover{background:#fb923c;color:#080c14;}
+.btn-purple{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2);}
+.btn-purple:hover{background:#a78bfa;color:#080c14;}
+.btn-green{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);}
+.btn-green:hover{background:#4ade80;color:#080c14;}
+.btn-gold{background:rgba(226,201,110,.1);color:#e2c96e;border:1px solid rgba(226,201,110,.2);}
+.btn-gold:hover{background:#e2c96e;color:#080c14;}
+.btn-pink{background:rgba(244,114,182,.1);color:#f472b6;border:1px solid rgba(244,114,182,.2);}
+.btn-pink:hover{background:#f472b6;color:#080c14;}
+.btn-big{font-size:13px;padding:12px 28px;border-radius:12px;margin-top:4px;}
+.glow-cyan{box-shadow:0 0 0 1px rgba(56,189,248,.12),inset 0 1px 0 rgba(56,189,248,.06);}
+.glow-amber{box-shadow:0 0 0 1px rgba(251,146,60,.12),inset 0 1px 0 rgba(251,146,60,.06);}
+.glow-green{box-shadow:0 0 0 1px rgba(74,222,128,.12),inset 0 1px 0 rgba(74,222,128,.06);}
+.glow-gold{box-shadow:0 0 0 1px rgba(226,201,110,.12),inset 0 1px 0 rgba(226,201,110,.06);}
 
-h2{ margin-bottom:15px; }
+/* ── FILTER PILLS — fixed active states ── */
+.filter-row{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.filt{font-size:11px;padding:5px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#475569;cursor:pointer;transition:.15s;font-weight:700;letter-spacing:.05em;outline:none;}
+.filt:hover{color:#94a3b8;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.07);}
+/* active states override hover completely */
+.filt.active-all{background:rgba(56,189,248,.18) !important;border-color:#38bdf8 !important;color:#38bdf8 !important;}
+.filt.active-weapon{background:rgba(251,146,60,.16) !important;border-color:#fb923c !important;color:#fb923c !important;}
+.filt.active-vitality{background:rgba(74,222,128,.14) !important;border-color:#4ade80 !important;color:#4ade80 !important;}
+.filt.active-spirit{background:rgba(167,139,250,.16) !important;border-color:#a78bfa !important;color:#a78bfa !important;}
 
-.result{ font-size:2rem; font-weight:bold; min-height:60px; display:flex; align-items:center; justify-content:center; margin:20px 0; }
+.item-display{min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;margin:6px 0 14px;}
+.item-cat{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
+.ic-weapon{background:rgba(251,146,60,.1);color:#fb923c;border:1px solid rgba(251,146,60,.2);}
+.ic-vitality{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);}
+.ic-spirit{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2);}
+.item-name{font-size:1.5rem;font-weight:800;letter-spacing:-.01em;}
+.in-weapon{color:#fb923c;}.in-vitality{color:#4ade80;}.in-spirit{color:#a78bfa;}.in-default{color:#38bdf8;}
+.build-cols{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+.bcol{flex:1;min-width:185px;max-width:240px;}
+.bcol-head{font-size:.6rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid;display:flex;align-items:center;gap:6px;}
+.wh{color:#fb923c;border-color:rgba(251,146,60,.4);}
+.vh{color:#4ade80;border-color:rgba(74,222,128,.35);}
+.sh{color:#a78bfa;border-color:rgba(167,139,250,.35);}
+.islot{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.055);border-radius:10px;padding:8px 10px;margin-bottom:7px;min-height:50px;transition:.2s;}
+.islot:hover{background:rgba(255,255,255,.04);}
+.tbadge{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;flex-shrink:0;}
+.t1{background:rgba(148,163,184,.1);color:#64748b;border:1px solid rgba(148,163,184,.2);}
+.t2{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.22);}
+.t3{background:rgba(56,189,248,.1);color:#38bdf8;border:1px solid rgba(56,189,248,.22);}
+.t4{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.28);}
+.iname{font-size:.74rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;}
+.wname{color:#fb923c;}.vname{color:#4ade80;}.sname{color:#a78bfa;}
+.itier{font-size:.58rem;color:#1e2d40;margin-top:2px;font-weight:600;}
+.hero-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+.section-divider{display:flex;align-items:center;gap:12px;margin:22px 0 18px;}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.055);}
+.section-divider span{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#1e2d40;}
+.abilities-grid{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+.ab-col{flex:1;min-width:172px;max-width:200px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.065);border-radius:14px;padding:12px 11px;}
+.ab-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.065);}
+.ab-key{width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0;}
+.k1{background:rgba(244,114,182,.15);color:#f472b6;border:1px solid rgba(244,114,182,.28);}
+.k2{background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.28);}
+.k3{background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.28);}
+.k4{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.28);}
+.ab-name{font-size:.76rem;font-weight:700;color:#cbd5e1;}
+.up-list{display:flex;flex-direction:column;gap:5px;}
+.urow{display:flex;align-items:center;gap:7px;border-radius:8px;padding:6px 8px;opacity:0;transform:translateY(4px);transition:opacity .28s,transform .28s;}
+.urow.vis{opacity:1;transform:translateY(0);}
+.ut1{background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.13);}
+.ut2{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.16);}
+.ut3{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.17);}
+.snum{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;flex-shrink:0;background:rgba(244,114,182,.12);color:#f472b6;border:1px solid rgba(244,114,182,.25);}
+.ulbl{font-size:.68rem;font-weight:700;}
+.ut1 .ulbl{color:#64748b;}.ut2 .ulbl{color:#4ade80;}.ut3 .ulbl{color:#fb923c;}
+.ucost{font-size:.58rem;color:#1e2d40;margin-top:1px;font-weight:600;}
+.empty-up{color:#1e293b;font-size:.7rem;padding:6px 0;font-style:italic;}
+.center{text-align:center;}
+.spinning{animation:spinFlash .08s linear infinite;}
+@keyframes spinFlash{50%{transform:scale(1.04);}}
 
-.hero   { color:#4ade80; }
-.build  { color:#a855f7; }
-.souls  { color:#fb923c; }
-.item              { color:#38bdf8; font-size:1.5rem; }
-.item.cat-weapon   { color:#fb923c; }
-.item.cat-vitality { color:#4ade80; }
-.item.cat-spirit   { color:#a855f7; }
+/* ── ABILITY TIMELINE (horizontal rows like screenshot) ── */
+.tl-wrap{background:#060a12;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px 16px 16px;margin-top:4px;}
+.tl-empty-msg{text-align:center;color:#1e293b;font-size:.72rem;font-style:italic;padding:20px 0;}
+.tl-rows{display:flex;flex-direction:column;gap:2px;}
 
-/* item category badge */
-.item-category{
-    font-size:.75rem;
-    font-weight:600;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    margin-bottom:4px;
-    display:inline-block;
-}
-.cat-weapon  { color:#fb923c; }
-.cat-vitality{ color:#4ade80; }
-.cat-spirit  { color:#a855f7; }
+.tl-row{display:flex;align-items:center;gap:0;border-radius:8px;padding:6px 4px;transition:background .2s;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s;}
+.tl-row.vis{opacity:1;transform:translateX(0);}
+.tl-row:hover{background:rgba(255,255,255,.025);}
 
-.item-display{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:4px;
-    min-height:80px;
-    justify-content:center;
-    margin:12px 0;
-}
+/* ability key badge on left */
+.tl-row-key{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0;margin-right:10px;}
 
-button{
-    background:#111827;
-    color:white;
-    border:none;
-    border-radius:10px;
-    padding:12px 20px;
-    cursor:pointer;
-    font-size:16px;
-    transition:.2s;
-}
-button:hover{ transform:scale(1.05); }
+/* the horizontal track */
+.tl-track{flex:1;position:relative;height:28px;display:flex;align-items:center;}
+.tl-track-line{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.07);}
 
-.hero-btn:hover   { background:#4ade80; color:black; }
-.build-btn:hover  { background:#a855f7; }
-.souls-btn:hover  { background:#fb923c; }
-.item-btn:hover   { background:#38bdf8; color:black; }
+/* unlock diamond at position 0 */
+.tl-diamond{width:10px;height:10px;border-radius:2px;transform:rotate(45deg);flex-shrink:0;position:absolute;}
 
-/* item filter row */
-.filter-row{
-    display:flex;
-    justify-content:center;
-    gap:6px;
-    flex-wrap:wrap;
-    margin-bottom:14px;
-}
-.filter-btn{
-    font-size:11px;
-    padding:4px 10px;
-    border-radius:99px;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.05);
-    color:#94a3b8;
-    cursor:pointer;
-    transition:.15s;
-}
-.filter-btn:hover{ transform:none; }
-.filter-btn.active-weapon  { background:rgba(251,146,60,.25); border-color:#fb923c; color:#fb923c; }
-.filter-btn.active-vitality{ background:rgba(74,222,128,.25); border-color:#4ade80; color:#4ade80; }
-.filter-btn.active-spirit  { background:rgba(168,85,247,.25); border-color:#a855f7; color:#a855f7; }
-.filter-btn.active-all     { background:rgba(56,189,248,.2);  border-color:#38bdf8; color:#38bdf8; }
+/* upgrade markers */
+.tl-marker{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;transform:translateX(-50%);opacity:0;transition:opacity .3s,transform .3s;transform:translateX(-50%) translateY(4px);}
+.tl-marker.vis{opacity:1;transform:translateX(-50%) translateY(0);}
 
-.item-wide{
-    width:660px;
-    max-width:100%;
-}
+/* dot above the line */
+.tl-mdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.tl-mdot.t1u{background:#4a5568;box-shadow:0 0 5px rgba(74,85,104,.5);border:1px solid #64748b;}
+.tl-mdot.t2u{background:#22c55e;box-shadow:0 0 7px rgba(34,197,94,.65);border:1px solid #4ade80;}
+.tl-mdot.t3u{background:#f97316;box-shadow:0 0 7px rgba(249,115,22,.65);border:1px solid #fb923c;}
 
-.roll-all{
-    margin-top:40px;
-    background:linear-gradient(90deg,#4ade80,#a855f7,#fb923c);
-    color:white;
-    font-size:22px;
-    font-weight:bold;
-    padding:18px 40px;
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(168,85,247,.5);
-}
-.roll-all:hover{ transform:scale(1.08); }
+/* step label below line */
+.tl-mlabel{font-size:.5rem;font-weight:800;color:#334155;letter-spacing:.04em;margin-top:2px;}
 
-.footer{ margin-top:30px; color:#64748b; }
-
-/* divider */
-.divider{
-    width:100%;
-    max-width:700px;
-    margin:40px auto 30px;
-    border:none;
-    border-top:1px solid rgba(255,255,255,.08);
-}
+/* boon cost chips at end */
+.tl-boon-total{font-size:.58rem;font-weight:800;color:#6b5a1e;background:rgba(226,201,110,.08);border:1px solid rgba(226,201,110,.15);border-radius:99px;padding:2px 8px;margin-left:10px;flex-shrink:0;white-space:nowrap;}
 </style>
-</head>
-<body>
 
-<h1>DEADLOCK RANDOMIZER</h1>
-<p class="subtitle">Roll a random hero, build path, soul goal, and item.</p>
+<nav class="nav">
+  <button class="nav-btn active-items" id="nb-items" onclick="showPage('items')">Items</button>
+  <button class="nav-btn" id="nb-build" onclick="showPage('build')">Build</button>
+  <button class="nav-btn" id="nb-hero" onclick="showPage('hero')">Hero</button>
+</nav>
 
-<div class="container">
-    <div class="section hero-card">
-        <h2>HERO</h2>
-        <div class="result hero" id="heroResult">---</div>
-        <button class="hero-btn" onclick="pickHero()">Roll Hero</button>
+<!-- ITEMS PAGE -->
+<div class="page active" id="page-items">
+  <p class="page-title ti">Random Items</p>
+  <p class="page-sub">Roll tier, item type &amp; item</p>
+  <div class="card-row">
+    <div class="card card-sm glow-amber">
+      <div class="card-label lbl-amber">Tier</div>
+      <div class="result ra" id="tierResult">---</div>
+      <div class="center"><button class="btn btn-amber" onclick="pickTier()">Roll Tier</button></div>
     </div>
-
-    <div class="section build-card">
-        <h2>BUILD</h2>
-        <div class="result build" id="buildResult">---</div>
-        <button class="build-btn" onclick="pickBuild()">Roll Build</button>
+    <div class="card card-sm" style="box-shadow:0 0 0 1px rgba(167,139,250,.12),inset 0 1px 0 rgba(167,139,250,.06);">
+      <div class="card-label lbl-purple">Item Type</div>
+      <div class="result rs" id="typeResult">---</div>
+      <div class="center"><button class="btn btn-purple" onclick="pickType()">Roll Type</button></div>
     </div>
-
-    <div class="section souls-card">
-        <h2>SOUL GOAL</h2>
-        <div class="result souls" id="soulsResult">---</div>
-        <button class="souls-btn" onclick="pickSouls()">Roll Souls</button>
+  </div>
+  <div class="card-row">
+    <div class="card card-wide glow-cyan">
+      <div class="card-label lbl-cyan">Item</div>
+      <div class="filter-row">
+        <button class="filt active-all" id="f-all" onclick="setFilter('all')">All</button>
+        <button class="filt" id="f-weapon" onclick="setFilter('weapon')">Weapon</button>
+        <button class="filt" id="f-vitality" onclick="setFilter('vitality')">Vitality</button>
+        <button class="filt" id="f-spirit" onclick="setFilter('spirit')">Spirit</button>
+      </div>
+      <div class="item-display">
+        <span id="itemCategory"></span>
+        <span class="item-name in-default" id="itemResult">---</span>
+      </div>
+      <div class="center"><button class="btn btn-cyan" onclick="pickItem()">Roll Item</button></div>
     </div>
+  </div>
+  <div class="center" style="margin-top:18px">
+    <button class="btn btn-big btn-cyan" onclick="rollItems()">Roll Everything</button>
+  </div>
 </div>
 
-<hr class="divider">
-
-<!-- ITEM SECTION -->
-<div class="container">
-    <div class="section item-card item-wide">
-        <h2>RANDOM ITEM</h2>
-
-        <div class="filter-row">
-            <button class="filter-btn active-all" id="f-all"      onclick="setFilter('all')">All</button>
-            <button class="filter-btn"             id="f-weapon"   onclick="setFilter('weapon')">⚙ Weapon</button>
-            <button class="filter-btn"             id="f-vitality" onclick="setFilter('vitality')">💚 Vitality</button>
-            <button class="filter-btn"             id="f-spirit"   onclick="setFilter('spirit')">🔮 Spirit</button>
-        </div>
-
-        <div class="item-display">
-            <span id="itemCategory"></span>
-            <span class="result item" id="itemResult">---</span>
-        </div>
-
-        <button class="item-btn" onclick="pickItem()">Roll Item</button>
+<!-- BUILD PAGE -->
+<div class="page" id="page-build">
+  <p class="page-title tb">Random Build</p>
+  <p class="page-sub">4 Weapon · 4 Vitality · 4 Spirit</p>
+  <div class="card card-full glow-gold">
+    <div class="build-cols">
+      <div class="bcol"><div class="bcol-head wh">Weapon</div><div id="weapon-slots"></div></div>
+      <div class="bcol"><div class="bcol-head vh">Vitality</div><div id="vitality-slots"></div></div>
+      <div class="bcol"><div class="bcol-head sh">Spirit</div><div id="spirit-slots"></div></div>
     </div>
+    <div class="center"><button class="btn btn-big btn-gold" onclick="rollBuild()">Roll Full Build</button></div>
+  </div>
 </div>
 
-<button class="roll-all" onclick="rollAll()">🎲 ROLL EVERYTHING</button>
+<!-- HERO PAGE -->
+<div class="page" id="page-hero">
+  <p class="page-title th">Random Hero</p>
+  <p class="page-sub">Roll your hero &amp; ability upgrades</p>
+  <div class="hero-row">
+    <div class="card card-sm glow-green">
+      <div class="card-label lbl-green">Hero</div>
+      <div class="result rg" id="heroResult">---</div>
+      <div class="center"><button class="btn btn-green" onclick="pickHero()">Roll Hero</button></div>
+    </div>
+  </div>
 
-<p class="footer">Deadlock Challenge Generator</p>
+  <div class="section-divider"><span>Upgrade Order — Cards</span></div>
+  <div class="abilities-grid">
+    <div class="ab-col"><div class="ab-head"><div class="ab-key k1">1</div><div class="ab-name">Ability 1</div></div><div class="up-list" id="upgrades-1"><div class="empty-up">not rolled yet</div></div></div>
+    <div class="ab-col"><div class="ab-head"><div class="ab-key k2">2</div><div class="ab-name">Ability 2</div></div><div class="up-list" id="upgrades-2"><div class="empty-up">not rolled yet</div></div></div>
+    <div class="ab-col"><div class="ab-head"><div class="ab-key k3">3</div><div class="ab-name">Ability 3</div></div><div class="up-list" id="upgrades-3"><div class="empty-up">not rolled yet</div></div></div>
+    <div class="ab-col"><div class="ab-head"><div class="ab-key k4">4</div><div class="ab-name">Ability 4</div></div><div class="up-list" id="upgrades-4"><div class="empty-up">not rolled yet</div></div></div>
+  </div>
+
+  <div class="section-divider"><span>Ability Point Timeline</span></div>
+  <div class="tl-wrap">
+    <div id="tl-empty-msg" class="tl-empty-msg">not rolled yet</div>
+    <div class="tl-rows" id="tl-rows"></div>
+  </div>
+  <!-- legend -->
+  <div style="display:flex;gap:14px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:5px;font-size:.6rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#4a5568;border:1px solid #64748b;"></div>T1 Upgrade
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:.6rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px rgba(34,197,94,.5);border:1px solid #4ade80;"></div>T2 Upgrade
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:.6rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#f97316;box-shadow:0 0 5px rgba(249,115,22,.5);border:1px solid #fb923c;"></div>T3 Upgrade
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:.6rem;color:#475569;font-weight:700;letter-spacing:.06em;text-transform:uppercase;">
+      <div style="width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:#a78bfa;border:1px solid #c4b5fd;"></div>Unlock
+    </div>
+  </div>
+
+  <div class="center" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+    <button class="btn btn-big btn-pink" onclick="rollUpgrades()">Roll Upgrades</button>
+    <button class="btn btn-big btn-green" onclick="rollHeroAll()">Roll Both</button>
+  </div>
+</div>
 
 <script>
-const heroes=[
-  "Abrams","Bebop","Dynamo","Grey Talon","Haze","Infernus","Ivy","Kelvin",
-  "Lady Geist","Lash","McGinnis","Mirage","Mo & Krill","Paradox","Pocket",
-  "Seven","Shiv","Sinclair","Vindicta","Viscous","Warden","Wraith","Yamato"
-];
+const heroes=["Abrams","Bebop","Dynamo","Grey Talon","Haze","Infernus","Ivy","Kelvin","Lady Geist","Lash","McGinnis","Mirage","Mo & Krill","Paradox","Pocket","Seven","Shiv","Sinclair","Vindicta","Viscous","Warden","Wraith","Yamato"];
+const itemTypes=["Weapon","Vitality","Spirit"];
+const tierVals=["800","1,600","3,200","6,400"];
+const tierCost={1:"800 souls",2:"1,600 souls",3:"3,200 souls",4:"6,400 souls"};
+const boonCost={1:1,2:2,3:5};
+const typeClasses={Weapon:'rw',Vitality:'rv',Spirit:'rs'};
+const abKeyColors=['k1','k2','k3','k4'];
+const abColors={1:'#f472b6',2:'#38bdf8',3:'#a78bfa',4:'#4ade80'};
+const abBg={1:'rgba(244,114,182,.15)',2:'rgba(56,189,248,.15)',3:'rgba(167,139,250,.15)',4:'rgba(74,222,128,.15)'};
+const abBorder={1:'rgba(244,114,182,.28)',2:'rgba(56,189,248,.28)',3:'rgba(167,139,250,.28)',4:'rgba(74,222,128,.28)'};
 
-const builds=["Green (Vitality)","Purple (Spirit)","Orange (Gun)"];
-const souls=["800","1600","3200","6400"];
-
-// ── All 154 standard shop items from deadlock.wiki (June 2026) ──
-const items = {
-  weapon: [
-    // T1 – 500
-    "Close Quarters","Extended Magazine","Headshot Booster","High-Velocity Rounds",
-    "Monster Rounds","Rapid Rounds","Restorative Shot",
-    // T2 – 1250
-    "Active Reload","Fleetfoot","Intensifying Magazine","Kinetic Dash","Long Range",
-    "Melee Charge","Mystic Shot","Opening Rounds","Recharging Rush","Slowing Bullets",
-    "Spirit Shredder Bullets","Split Shot","Stalker","Swift Striker","Titanic Magazine",
-    "Weakening Headshot",
-    // T3 – 3000
-    "Alchemical Fire","Ballistic Enchantment","Berserker","Blood Tribute","Burst Fire",
-    "Cultist Sacrifice","Escalating Resilience","Express Shot","Headhunter","Heroic Aura",
-    "Hollow Point","Hunter's Aura","Point Blank","Shadow Weave","Sharpshooter",
-    "Spirit Rend","Tesla Bullets","Toxic Bullets","Weighted Shots",
-    // T4 – 6200
-    "Armor Piercing Rounds","Capacitor","Crippling Headshot","Crushing Fists","Frenzy",
-    "Glass Cannon","Lucky Shot","Ricochet","Silencer","Spellslinger","Spiritual Overflow"
+const items={
+  weapon:[
+    {n:"Close Quarters",t:1},{n:"Extended Magazine",t:1},{n:"Headshot Booster",t:1},{n:"High-Velocity Rounds",t:1},{n:"Monster Rounds",t:1},{n:"Rapid Rounds",t:1},{n:"Restorative Shot",t:1},
+    {n:"Active Reload",t:2},{n:"Fleetfoot",t:2},{n:"Intensifying Magazine",t:2},{n:"Kinetic Dash",t:2},{n:"Long Range",t:2},{n:"Melee Charge",t:2},{n:"Mystic Shot",t:2},{n:"Opening Rounds",t:2},{n:"Recharging Rush",t:2},{n:"Slowing Bullets",t:2},{n:"Spirit Shredder Bullets",t:2},{n:"Split Shot",t:2},{n:"Stalker",t:2},{n:"Swift Striker",t:2},{n:"Titanic Magazine",t:2},{n:"Weakening Headshot",t:2},
+    {n:"Alchemical Fire",t:3},{n:"Ballistic Enchantment",t:3},{n:"Berserker",t:3},{n:"Blood Tribute",t:3},{n:"Burst Fire",t:3},{n:"Cultist Sacrifice",t:3},{n:"Escalating Resilience",t:3},{n:"Express Shot",t:3},{n:"Headhunter",t:3},{n:"Heroic Aura",t:3},{n:"Hollow Point",t:3},{n:"Hunter's Aura",t:3},{n:"Point Blank",t:3},{n:"Shadow Weave",t:3},{n:"Sharpshooter",t:3},{n:"Spirit Rend",t:3},{n:"Tesla Bullets",t:3},{n:"Toxic Bullets",t:3},{n:"Weighted Shots",t:3},
+    {n:"Armor Piercing Rounds",t:4},{n:"Capacitor",t:4},{n:"Crippling Headshot",t:4},{n:"Crushing Fists",t:4},{n:"Frenzy",t:4},{n:"Glass Cannon",t:4},{n:"Lucky Shot",t:4},{n:"Ricochet",t:4},{n:"Silencer",t:4},{n:"Spellslinger",t:4},{n:"Spiritual Overflow",t:4}
   ],
-  vitality: [
-    // T1
-    "Extra Health","Extra Regen","Extra Stamina","Grit","Healing Rite",
-    "Melee Lifesteal","Rebuttal","Sprint Boots",
-    // T2
-    "Battle Vest","Bullet Lifesteal","Debuff Reducer","Enchanter's Emblem","Enduring Speed",
-    "Guardian Ward","Healbane","Healing Booster","Reactive Barrier","Restorative Locket",
-    "Return Fire","Spirit Lifesteal","Spirit Shielding","Trophy Collector","Weapon Shielding",
-    // T3
-    "Bullet Resilience","Counterspell","Dispel Magic","Fortitude","Fury Trance",
-    "Healing Nova","Lifestrike","Majestic Leap","Metal Skin","Rescue Beam",
-    "Spirit Resilience","Stamina Mastery","Veil Walker","Warp Stone",
-    // T4
-    "Cheat Death","Colossus","Divine Barrier","Diviner's Kevlar","Healing Tempo",
-    "Indomitable","Infuser","Inhibitor","Juggernaut","Leech","Phantom Strike",
-    "Plated Armor","Siphon Bullets","Spellbreaker","Unstoppable","Vampiric Burst","Witchmail"
+  vitality:[
+    {n:"Extra Health",t:1},{n:"Extra Regen",t:1},{n:"Extra Stamina",t:1},{n:"Grit",t:1},{n:"Healing Rite",t:1},{n:"Melee Lifesteal",t:1},{n:"Rebuttal",t:1},{n:"Sprint Boots",t:1},
+    {n:"Battle Vest",t:2},{n:"Bullet Lifesteal",t:2},{n:"Debuff Reducer",t:2},{n:"Enchanter's Emblem",t:2},{n:"Enduring Speed",t:2},{n:"Guardian Ward",t:2},{n:"Healbane",t:2},{n:"Healing Booster",t:2},{n:"Reactive Barrier",t:2},{n:"Restorative Locket",t:2},{n:"Return Fire",t:2},{n:"Spirit Lifesteal",t:2},{n:"Spirit Shielding",t:2},{n:"Trophy Collector",t:2},{n:"Weapon Shielding",t:2},
+    {n:"Bullet Resilience",t:3},{n:"Counterspell",t:3},{n:"Dispel Magic",t:3},{n:"Fortitude",t:3},{n:"Fury Trance",t:3},{n:"Healing Nova",t:3},{n:"Lifestrike",t:3},{n:"Majestic Leap",t:3},{n:"Metal Skin",t:3},{n:"Rescue Beam",t:3},{n:"Spirit Resilience",t:3},{n:"Stamina Mastery",t:3},{n:"Veil Walker",t:3},{n:"Warp Stone",t:3},
+    {n:"Cheat Death",t:4},{n:"Colossus",t:4},{n:"Divine Barrier",t:4},{n:"Diviner's Kevlar",t:4},{n:"Healing Tempo",t:4},{n:"Indomitable",t:4},{n:"Infuser",t:4},{n:"Inhibitor",t:4},{n:"Juggernaut",t:4},{n:"Leech",t:4},{n:"Phantom Strike",t:4},{n:"Plated Armor",t:4},{n:"Siphon Bullets",t:4},{n:"Spellbreaker",t:4},{n:"Unstoppable",t:4},{n:"Vampiric Burst",t:4},{n:"Witchmail",t:4}
   ],
-  spirit: [
-    // T1
-    "Extra Charge","Extra Spirit","Golden Goose Egg","Mystic Burst","Mystic Expansion",
-    "Mystic Regeneration","Rusted Barrel","Spirit Strike",
-    // T2
-    "Arcane Surge","Bullet Resist Shredder","Cold Front","Compress Cooldown",
-    "Duration Extender","Improved Spirit","Mystic Slow","Mystic Vulnerability",
-    "Quicksilver Reload","Slowing Hex","Spirit Sap","Suppressor",
-    // T3
-    "Decay","Disarming Hex","Greater Expansion","Knockdown","Radiant Regeneration",
-    "Rapid Recharge","Silence Wave","Spirit Snatch","Superior Cooldown","Superior Duration",
-    "Surge of Power","Tankbuster","Torment Pulse",
-    // T4
-    "Arctic Blast","Boundless Spirit","Cursed Relic","Echo Shard","Escalating Exposure",
-    "Ethereal Shift","Focus Lens","Lightning Scroll","Magic Carpet","Mercurial Magnum",
-    "Mystic Reverb","Refresher","Scourge","Spirit Burn","Transcendent Cooldown","Vortex Web"
+  spirit:[
+    {n:"Extra Charge",t:1},{n:"Extra Spirit",t:1},{n:"Golden Goose Egg",t:1},{n:"Mystic Burst",t:1},{n:"Mystic Expansion",t:1},{n:"Mystic Regeneration",t:1},{n:"Rusted Barrel",t:1},{n:"Spirit Strike",t:1},
+    {n:"Arcane Surge",t:2},{n:"Bullet Resist Shredder",t:2},{n:"Cold Front",t:2},{n:"Compress Cooldown",t:2},{n:"Duration Extender",t:2},{n:"Improved Spirit",t:2},{n:"Mystic Slow",t:2},{n:"Mystic Vulnerability",t:2},{n:"Quicksilver Reload",t:2},{n:"Slowing Hex",t:2},{n:"Spirit Sap",t:2},{n:"Suppressor",t:2},
+    {n:"Decay",t:3},{n:"Disarming Hex",t:3},{n:"Greater Expansion",t:3},{n:"Knockdown",t:3},{n:"Radiant Regeneration",t:3},{n:"Rapid Recharge",t:3},{n:"Silence Wave",t:3},{n:"Spirit Snatch",t:3},{n:"Superior Cooldown",t:3},{n:"Superior Duration",t:3},{n:"Surge of Power",t:3},{n:"Tankbuster",t:3},{n:"Torment Pulse",t:3},
+    {n:"Arctic Blast",t:4},{n:"Boundless Spirit",t:4},{n:"Cursed Relic",t:4},{n:"Echo Shard",t:4},{n:"Escalating Exposure",t:4},{n:"Ethereal Shift",t:4},{n:"Focus Lens",t:4},{n:"Lightning Scroll",t:4},{n:"Magic Carpet",t:4},{n:"Mercurial Magnum",t:4},{n:"Mystic Reverb",t:4},{n:"Refresher",t:4},{n:"Scourge",t:4},{n:"Spirit Burn",t:4},{n:"Transcendent Cooldown",t:4},{n:"Vortex Web",t:4}
   ]
 };
 
-let activeFilter = 'all';
-
-function setFilter(f){
-  activeFilter = f;
-  ['all','weapon','vitality','spirit'].forEach(k=>{
-    const btn = document.getElementById('f-'+k);
-    btn.className = 'filter-btn' + (k===f ? ` active-${k}` : '');
-  });
-}
-
 const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+function tick(){try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="square";o.frequency.value=680;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.03,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.04);o.start();o.stop(audioCtx.currentTime+.04);}catch(e){}}
+function win(){try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="triangle";o.frequency.setValueAtTime(500,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1200,audioCtx.currentTime+.18);o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.07,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.2);o.start();o.stop(audioCtx.currentTime+.2);}catch(e){}}
 
-function tickSound(){
-  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
-  osc.type="square"; osc.frequency.value=700;
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  gain.gain.setValueAtTime(.04,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.04);
-  osc.start(); osc.stop(audioCtx.currentTime+.04);
+function showPage(p){
+  ['items','build','hero'].forEach(x=>{document.getElementById('page-'+x).classList.remove('active');document.getElementById('nb-'+x).className='nav-btn';});
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nb-'+p).className='nav-btn active-'+p;
 }
 
-function winSound(){
-  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
-  osc.type="triangle";
-  osc.frequency.setValueAtTime(500,audioCtx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(1200,audioCtx.currentTime+.18);
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  gain.gain.setValueAtTime(.08,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.2);
-  osc.start(); osc.stop(audioCtx.currentTime+.2);
+function spinRoll(id,list,cls){
+  const el=document.getElementById(id);el.className=cls+' spinning';
+  const iv=setInterval(()=>{el.textContent=list[Math.floor(Math.random()*list.length)];tick();},36);
+  setTimeout(()=>{clearInterval(iv);el.textContent=list[Math.floor(Math.random()*list.length)];el.className=cls;win();},620);
 }
 
-function spinRoll(id, list, callback){
-  const el=document.getElementById(id);
-  el.classList.add("spinning");
-  const interval=setInterval(()=>{
-    el.textContent=list[Math.floor(Math.random()*list.length)];
-    tickSound();
-  },35);
-  setTimeout(()=>{
-    clearInterval(interval);
-    const pick = list[Math.floor(Math.random()*list.length)];
-    el.textContent = pick;
-    el.classList.remove("spinning");
-    winSound();
-    if(callback) callback(pick);
-  },600);
+function pickType(){
+  const el=document.getElementById('typeResult');
+  const typeList=['Weapon','Vitality','Spirit'];
+  let idx=0;
+  el.className='result rw spinning';
+  const iv=setInterval(()=>{const t=typeList[idx%typeList.length];el.textContent=t;el.className='result '+typeClasses[t]+' spinning';idx++;tick();},90);
+  setTimeout(()=>{clearInterval(iv);const pick=typeList[Math.floor(Math.random()*typeList.length)];el.textContent=pick;el.className='result '+typeClasses[pick];win();},630);
 }
 
-function getItemPool(){
-  if(activeFilter==='all'){
-    return [
-      ...items.weapon.map(n=>({name:n,cat:'weapon'})),
-      ...items.vitality.map(n=>({name:n,cat:'vitality'})),
-      ...items.spirit.map(n=>({name:n,cat:'spirit'}))
-    ];
-  }
-  return items[activeFilter].map(n=>({name:n,cat:activeFilter}));
+let activeFilter='all';
+function setFilter(f){
+  activeFilter=f;
+  // clear all, set selected
+  ['all','weapon','vitality','spirit'].forEach(k=>{
+    document.getElementById('f-'+k).className='filt';
+  });
+  document.getElementById('f-'+f).className='filt active-'+f;
 }
-
+function getPool(){
+  if(activeFilter==='all') return[...items.weapon.map(i=>({...i,cat:'weapon'})),...items.vitality.map(i=>({...i,cat:'vitality'})),...items.spirit.map(i=>({...i,cat:'spirit'}))];
+  return items[activeFilter].map(i=>({...i,cat:activeFilter}));
+}
 function pickItem(){
-  const pool = getItemPool();
-  const namePool = pool.map(i=>i.name);
-  const catEl = document.getElementById('itemCategory');
+  const pool=getPool(),catEl=document.getElementById('itemCategory'),el=document.getElementById('itemResult');
+  el.classList.add('spinning');catEl.textContent='';
+  const iv=setInterval(()=>{const r=pool[Math.floor(Math.random()*pool.length)];el.textContent=r.n;el.className='item-name spinning in-'+r.cat;tick();},36);
+  setTimeout(()=>{clearInterval(iv);const pick=pool[Math.floor(Math.random()*pool.length)];el.textContent=pick.n;el.className='item-name in-'+pick.cat;catEl.innerHTML='<span class="item-cat ic-'+pick.cat+'">'+pick.cat+'</span>';win();},620);
+}
+function pickTier(){spinRoll('tierResult',tierVals,'result ra');}
+function pickHero(){spinRoll('heroResult',heroes,'result rg');}
+function rollItems(){pickTier();setTimeout(()=>pickType(),110);setTimeout(()=>pickItem(),220);}
+function rollHeroAll(){pickHero();setTimeout(()=>rollUpgrades(),300);}
 
-  const el = document.getElementById('itemResult');
-  el.classList.add("spinning");
-  catEl.textContent = '';
+// ── TIMELINE ──
+// The timeline shows each ability as a horizontal row.
+// Steps are spread left-to-right by their global order number (1-12).
+// Diamond at far left = unlock. Then dots at their step position.
+// Color of dot = tier of that upgrade (grey T1, green T2, orange T3).
 
-  const interval = setInterval(()=>{
-    const r = pool[Math.floor(Math.random()*pool.length)];
-    el.textContent = r.name;
-    el.className = `result item spinning cat-${r.cat}`;
-    tickSound();
-  },35);
+function buildTimeline(byAb){
+  const wrap=document.getElementById('tl-rows');
+  wrap.innerHTML='';
+  document.getElementById('tl-empty-msg').style.display='none';
+  const STEPS=12;
 
-  setTimeout(()=>{
-    clearInterval(interval);
-    const pick = pool[Math.floor(Math.random()*pool.length)];
-    el.textContent = pick.name;
-    el.className = `result item cat-${pick.cat}`;
-    catEl.innerHTML = `<span class="item-category cat-${pick.cat}">${pick.cat}</span>`;
-    winSound();
-  },600);
+  for(let ab=1;ab<=4;ab++){
+    const upgrades=byAb[ab]; // [{step, upTier}] sorted by step asc
+    const totalBoons=upgrades.reduce((s,e)=>s+boonCost[e.upTier],0);
+
+    const row=document.createElement('div');
+    row.className='tl-row';
+    row.style.cssText='display:flex;align-items:center;gap:0;border-radius:8px;padding:7px 6px;opacity:0;transition:opacity .35s,transform .35s;transform:translateX(-6px);';
+
+    // ability key badge
+    const key=document.createElement('div');
+    key.className='tl-row-key';
+    key.textContent=ab;
+    key.style.cssText=`width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.76rem;flex-shrink:0;margin-right:10px;background:${abBg[ab]};color:${abColors[ab]};border:1px solid ${abBorder[ab]};`;
+    row.appendChild(key);
+
+    // track container
+    const track=document.createElement('div');
+    track.style.cssText='flex:1;position:relative;height:32px;';
+
+    // track line
+    const line=document.createElement('div');
+    line.style.cssText='position:absolute;left:12px;right:0;top:50%;transform:translateY(-50%);height:1px;background:rgba(255,255,255,.06);';
+    track.appendChild(line);
+
+    // unlock diamond at left
+    const diamond=document.createElement('div');
+    diamond.style.cssText=`position:absolute;left:6px;top:50%;transform:translateY(-50%) rotate(45deg);width:8px;height:8px;border-radius:1px;background:${abColors[ab]};opacity:.7;border:1px solid ${abColors[ab]};`;
+    track.appendChild(diamond);
+
+    // place upgrade dots spread across the track
+    // positions: step 1 = ~10%, step 12 = ~95% of track width
+    upgrades.forEach((e)=>{
+      const pct=8+(e.step/STEPS)*88; // 8% to 96%
+      const dotWrap=document.createElement('div');
+      dotWrap.style.cssText=`position:absolute;left:${pct}%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .3s ${40+e.step*60}ms, transform .3s ${40+e.step*60}ms;`;
+
+      // dot
+      const dot=document.createElement('div');
+      const dotColors={1:'background:#4a5568;box-shadow:0 0 4px rgba(74,85,104,.5);border:1px solid #64748b;',2:'background:#22c55e;box-shadow:0 0 7px rgba(34,197,94,.6);border:1px solid #4ade80;',3:'background:#f97316;box-shadow:0 0 7px rgba(249,115,22,.6);border:1px solid #fb923c;'};
+      dot.style.cssText=`width:9px;height:9px;border-radius:50%;${dotColors[e.upTier]}`;
+      dotWrap.appendChild(dot);
+
+      // step label below
+      const lbl=document.createElement('div');
+      lbl.style.cssText='font-size:.48rem;font-weight:800;color:#2d3f55;margin-top:3px;letter-spacing:.03em;';
+      lbl.textContent=String(e.step).padStart(2,'0');
+      dotWrap.appendChild(lbl);
+
+      track.appendChild(dotWrap);
+
+      // animate in after row appears
+      setTimeout(()=>{dotWrap.style.opacity='1';dotWrap.style.transform='translate(-50%,-50%)';tick();},200+e.step*65);
+    });
+
+    row.appendChild(track);
+
+    // boon total chip
+    const chip=document.createElement('div');
+    chip.style.cssText='font-size:.56rem;font-weight:800;color:#6b5a1e;background:rgba(226,201,110,.07);border:1px solid rgba(226,201,110,.14);border-radius:99px;padding:2px 8px;margin-left:10px;flex-shrink:0;white-space:nowrap;';
+    chip.textContent=totalBoons+' boon'+(totalBoons!==1?'s':'');
+    row.appendChild(chip);
+
+    wrap.appendChild(row);
+    setTimeout(()=>{row.style.opacity='1';row.style.transform='translateX(0)';},50+(ab-1)*80);
+  }
+  setTimeout(win,1000);
 }
 
-function pickHero()  { spinRoll("heroResult",  heroes); }
-function pickBuild() { spinRoll("buildResult", builds); }
-function pickSouls() { spinRoll("soulsResult", souls);  }
+function rollUpgrades(){
+  const pointers=[0,0,0,0],sequence=[];
+  while(sequence.length<12){
+    const avail=[];for(let i=0;i<4;i++)if(pointers[i]<3)avail.push(i);
+    const p=avail[Math.floor(Math.random()*avail.length)];
+    sequence.push({ab:p+1,upTier:pointers[p]+1,step:sequence.length+1});
+    pointers[p]++;
+  }
+  const byAb={1:[],2:[],3:[],4:[]};
+  sequence.forEach(s=>byAb[s.ab].push(s));
 
-function rollAll(){
-  pickHero();
-  setTimeout(()=>pickBuild(), 100);
-  setTimeout(()=>pickSouls(), 200);
-  setTimeout(()=>pickItem(),  300);
+  // cards
+  for(let ab=1;ab<=4;ab++){
+    const cont=document.getElementById('upgrades-'+ab);cont.innerHTML='';
+    byAb[ab].forEach((e,i)=>{
+      const row=document.createElement('div');row.className='urow ut'+e.upTier;
+      const b=boonCost[e.upTier];
+      row.innerHTML=`<div class="snum">${e.step}</div><div style="flex:1;text-align:left"><div class="ulbl">T${e.upTier} Upgrade</div><div class="ucost">${b} boon${b>1?'s':''}</div></div>`;
+      cont.appendChild(row);
+      setTimeout(()=>{row.classList.add('vis');tick();},55+(ab-1)*45+i*85);
+    });
+  }
+
+  buildTimeline(byAb);
 }
+
+// build
+function makeEmpty(){const d=document.createElement('div');d.className='islot';const b=document.createElement('div');b.className='tbadge t1';b.style.opacity='.14';b.textContent='—';const n=document.createElement('div');n.style.cssText='font-size:.7rem;color:#1a2535;font-weight:600;';n.textContent='Empty';d.appendChild(b);d.appendChild(n);return d;}
+function makeSlot(item,cat,spinning){const d=document.createElement('div');d.className='islot';const b=document.createElement('div');b.className='tbadge t'+item.t;b.textContent='T'+item.t;if(spinning)b.style.animation='spinFlash .14s linear infinite';const info=document.createElement('div');const nm=document.createElement('div');nm.className='iname '+cat[0]+'name';nm.textContent=item.n;const tr=document.createElement('div');tr.className='itier';tr.textContent='T'+item.t+' · '+tierCost[item.t];info.appendChild(nm);info.appendChild(tr);d.appendChild(b);d.appendChild(info);return d;}
+function initSlots(){['weapon','vitality','spirit'].forEach(c=>{const el=document.getElementById(c+'-slots');el.innerHTML='';for(let i=0;i<4;i++)el.appendChild(makeEmpty());});}
+function pick4(pool){return[...pool].sort(()=>Math.random()-.5).slice(0,4);}
+function animateCol(cat,picks,delay){const cont=document.getElementById(cat+'-slots'),pool=items[cat];for(let si=0;si<4;si++){(function(i){setTimeout(()=>{const iv=setInterval(()=>{const r=pool[Math.floor(Math.random()*pool.length)];cont.children[i].replaceWith(makeSlot(r,cat,true));tick();},50);setTimeout(()=>{clearInterval(iv);cont.children[i].replaceWith(makeSlot(picks[i],cat,false));if(i===3)win();},500);},delay+i*130);})(si);}}
+function rollBuild(){initSlots();setTimeout(()=>{animateCol('weapon',pick4(items.weapon),0);animateCol('vitality',pick4(items.vitality),160);animateCol('spirit',pick4(items.spirit),320);},50);}
+
+initSlots();
 </script>
-</body>
-</html>
