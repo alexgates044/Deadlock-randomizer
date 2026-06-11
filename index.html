@@ -1,31 +1,10 @@
 <!DOCTYPE html>
-
-
-
 <html lang="en">
-
-
-
 <head>
-
-
-
 <meta charset="UTF-8">
-
-
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
 <title>Deadlock Randomizer</title>
-
-
-
-
-
 <style>
-
 .result{
     font-size:2rem;
     font-weight:bold;
@@ -36,833 +15,376 @@
     margin:20px 0;
     transition:.1s;
 }
-
 .spinning{
     animation:spinFlash .08s linear infinite;
 }
-
 @keyframes spinFlash{
     0%{transform:scale(1);}
     50%{transform:scale(1.08);}
     100%{transform:scale(1);}
 }
-
-
 *{
-
-
-
     margin:0;
-
-
-
     padding:0;
-
-
-
     box-sizing:border-box;
-
-
-
 }
-
-
-
-
-
-
-
 body{
-
-
-
     min-height:100vh;
-
-
-
-    background:
-
-
-
-        radial-gradient(circle at top, #1f2937, #0f172a 70%);
-
-
-
+    background:radial-gradient(circle at top, #1f2937, #0f172a 70%);
     color:white;
-
-
-
     font-family:'Segoe UI', sans-serif;
-
-
-
     text-align:center;
-
-
-
     padding:40px;
-
-
-
 }
-
-
-
-
-
-
-
 h1{
-
-
-
     font-size:4rem;
-
-
-
     margin-bottom:10px;
-
-
-
     color:#4ade80;
-
-
-
-    text-shadow:
-
-
-
-        0 0 10px #4ade80,
-
-
-
-        0 0 20px #4ade80;
-
-
-
+    text-shadow:0 0 10px #4ade80, 0 0 20px #4ade80;
 }
-
-
-
-
-
-
-
 .subtitle{
-
-
-
     color:#94a3b8;
-
-
-
     margin-bottom:40px;
-
-
-
 }
-
-
-
-
-
-
-
 .container{
-
-
-
     display:flex;
-
-
-
     justify-content:center;
-
-
-
     gap:30px;
-
-
-
     flex-wrap:wrap;
-
-
-
 }
-
-
-
-
-
-
-
 .section{
-
-
-
     width:300px;
-
-
-
     background:rgba(15,23,42,.9);
-
-
-
     border:1px solid rgba(255,255,255,.1);
-
-
-
     border-radius:20px;
-
-
-
     padding:25px;
-
-
-
     backdrop-filter:blur(8px);
-
-
-
-    box-shadow:
-
-
-
-        0 0 25px rgba(0,0,0,.4);
-
-
-
+    box-shadow:0 0 25px rgba(0,0,0,.4);
 }
+.hero-card   { border-top:4px solid #4ade80; }
+.build-card  { border-top:4px solid #a855f7; }
+.souls-card  { border-top:4px solid #fb923c; }
+.item-card   { border-top:4px solid #38bdf8; }
 
+h2{ margin-bottom:15px; }
 
+.result{ font-size:2rem; font-weight:bold; min-height:60px; display:flex; align-items:center; justify-content:center; margin:20px 0; }
 
+.hero   { color:#4ade80; }
+.build  { color:#a855f7; }
+.souls  { color:#fb923c; }
+.item              { color:#38bdf8; font-size:1.5rem; }
+.item.cat-weapon   { color:#fb923c; }
+.item.cat-vitality { color:#4ade80; }
+.item.cat-spirit   { color:#a855f7; }
 
-
-
-
-.hero-card{
-
-
-
-    border-top:4px solid #4ade80;
-
-
-
+/* item category badge */
+.item-category{
+    font-size:.75rem;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-bottom:4px;
+    display:inline-block;
 }
+.cat-weapon  { color:#fb923c; }
+.cat-vitality{ color:#4ade80; }
+.cat-spirit  { color:#a855f7; }
 
-
-
-
-
-
-
-.build-card{
-
-
-
-    border-top:4px solid #a855f7;
-
-
-
-}
-
-
-
-
-
-
-
-.souls-card{
-
-
-
-    border-top:4px solid #fb923c;
-
-
-
-}
-
-
-
-
-
-
-
-h2{
-
-
-
-    margin-bottom:15px;
-
-
-
-}
-
-
-
-
-
-
-
-.result{
-
-
-
-    font-size:2rem;
-
-
-
-    font-weight:bold;
-
-
-
-    min-height:60px;
-
-
-
+.item-display{
     display:flex;
-
-
-
+    flex-direction:column;
     align-items:center;
-
-
-
+    gap:4px;
+    min-height:80px;
     justify-content:center;
-
-
-
-    margin:20px 0;
-
-
-
+    margin:12px 0;
 }
-
-
-
-
-
-
-
-.hero{
-
-
-
-    color:#4ade80;
-
-
-
-}
-
-
-
-
-
-
-
-.build{
-
-
-
-    color:#a855f7;
-
-
-
-}
-
-
-
-
-
-
-
-.souls{
-
-
-
-    color:#fb923c;
-
-
-
-}
-
-
-
-
-
-
 
 button{
-
-
-
     background:#111827;
-
-
-
     color:white;
-
-
-
     border:none;
-
-
-
     border-radius:10px;
-
-
-
     padding:12px 20px;
-
-
-
     cursor:pointer;
-
-
-
     font-size:16px;
-
-
-
     transition:.2s;
-
-
-
 }
+button:hover{ transform:scale(1.05); }
 
+.hero-btn:hover   { background:#4ade80; color:black; }
+.build-btn:hover  { background:#a855f7; }
+.souls-btn:hover  { background:#fb923c; }
+.item-btn:hover   { background:#38bdf8; color:black; }
 
-
-
-
-
-
-button:hover{
-
-
-
-    transform:scale(1.05);
-
-
-
+/* item filter row */
+.filter-row{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
 }
-
-
-
-
-
-
-
-.hero-btn:hover{
-
-
-
-    background:#4ade80;
-
-
-
-    color:black;
-
-
-
+.filter-btn{
+    font-size:11px;
+    padding:4px 10px;
+    border-radius:99px;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.05);
+    color:#94a3b8;
+    cursor:pointer;
+    transition:.15s;
 }
+.filter-btn:hover{ transform:none; }
+.filter-btn.active-weapon  { background:rgba(251,146,60,.25); border-color:#fb923c; color:#fb923c; }
+.filter-btn.active-vitality{ background:rgba(74,222,128,.25); border-color:#4ade80; color:#4ade80; }
+.filter-btn.active-spirit  { background:rgba(168,85,247,.25); border-color:#a855f7; color:#a855f7; }
+.filter-btn.active-all     { background:rgba(56,189,248,.2);  border-color:#38bdf8; color:#38bdf8; }
 
-
-
-
-
-
-
-.build-btn:hover{
-
-
-
-    background:#a855f7;
-
-
-
+.item-wide{
+    width:660px;
+    max-width:100%;
 }
-
-
-
-
-
-
-
-.souls-btn:hover{
-
-
-
-    background:#fb923c;
-
-
-
-}
-
-
-
-
-
-
 
 .roll-all{
-
-
-
     margin-top:40px;
-
-
-
-    background:linear-gradient(
-
-
-
-        90deg,
-
-
-
-        #4ade80,
-
-
-
-        #a855f7,
-
-
-
-        #fb923c
-
-
-
-    );
-
-
-
+    background:linear-gradient(90deg,#4ade80,#a855f7,#fb923c);
     color:white;
-
-
-
     font-size:22px;
-
-
-
     font-weight:bold;
-
-
-
     padding:18px 40px;
-
-
-
     border-radius:15px;
-
-
-
-    box-shadow:
-
-
-
-        0 0 20px rgba(168,85,247,.5);
-
-
-
+    box-shadow:0 0 20px rgba(168,85,247,.5);
 }
+.roll-all:hover{ transform:scale(1.08); }
 
+.footer{ margin-top:30px; color:#64748b; }
 
-
-
-
-
-
-.roll-all:hover{
-
-
-
-    transform:scale(1.08);
-
-
-
+/* divider */
+.divider{
+    width:100%;
+    max-width:700px;
+    margin:40px auto 30px;
+    border:none;
+    border-top:1px solid rgba(255,255,255,.08);
 }
-
-
-
-
-
-
-
-.footer{
-
-
-
-    margin-top:30px;
-
-
-
-    color:#64748b;
-
-
-
-}
-
-
-
 </style>
-
-
-
 </head>
-
-
-
-
-
-
-
 <body>
 
-
-
-
-
-
-
 <h1>DEADLOCK RANDOMIZER</h1>
-
-
-
-<p class="subtitle">Roll a random hero, build path, and soul goal.</p>
-
-
-
-
-
-
+<p class="subtitle">Roll a random hero, build path, soul goal, and item.</p>
 
 <div class="container">
-
-
-
-
-
-
-
     <div class="section hero-card">
-
-
-
         <h2>HERO</h2>
-
-
-
         <div class="result hero" id="heroResult">---</div>
-
-
-
         <button class="hero-btn" onclick="pickHero()">Roll Hero</button>
-
-
-
     </div>
-
-
-
-
-
-
 
     <div class="section build-card">
-
-
-
         <h2>BUILD</h2>
-
-
-
         <div class="result build" id="buildResult">---</div>
-
-
-
         <button class="build-btn" onclick="pickBuild()">Roll Build</button>
-
-
-
     </div>
-
-
-
-
-
-
 
     <div class="section souls-card">
-
-
-
         <h2>SOUL GOAL</h2>
-
-
-
         <div class="result souls" id="soulsResult">---</div>
-
-
-
         <button class="souls-btn" onclick="pickSouls()">Roll Souls</button>
-
-
-
     </div>
-
-
-
-
-
-
-
 </div>
 
+<hr class="divider">
 
+<!-- ITEM SECTION -->
+<div class="container">
+    <div class="section item-card item-wide">
+        <h2>RANDOM ITEM</h2>
 
+        <div class="filter-row">
+            <button class="filter-btn active-all" id="f-all"      onclick="setFilter('all')">All</button>
+            <button class="filter-btn"             id="f-weapon"   onclick="setFilter('weapon')">⚙ Weapon</button>
+            <button class="filter-btn"             id="f-vitality" onclick="setFilter('vitality')">💚 Vitality</button>
+            <button class="filter-btn"             id="f-spirit"   onclick="setFilter('spirit')">🔮 Spirit</button>
+        </div>
 
+        <div class="item-display">
+            <span id="itemCategory"></span>
+            <span class="result item" id="itemResult">---</span>
+        </div>
 
+        <button class="item-btn" onclick="pickItem()">Roll Item</button>
+    </div>
+</div>
 
+<button class="roll-all" onclick="rollAll()">🎲 ROLL EVERYTHING</button>
 
-<button class="roll-all" onclick="rollAll()">
-
-
-
-🎲 ROLL EVERYTHING
-
-
-
-</button>
-
-
-
-
-
-
-
-<p class="footer">
-
-
-
-Deadlock Challenge Generator
-
-
-
-</p>
-
-
-
-
-
-
+<p class="footer">Deadlock Challenge Generator</p>
 
 <script>
-
-
-
-
-
-
-
 const heroes=[
-"Abrams","Bebop","Dynamo","Grey Talon","Haze","Infernus","Ivy","Kelvin","Lady Geist","Lash","McGinnis","Mirage","Mo & Krill","Paradox","Pocket","Seven","Shiv","Sinclair","Vindicta","Viscous","Warden","Wraith","Yamato"
+  "Abrams","Bebop","Dynamo","Grey Talon","Haze","Infernus","Ivy","Kelvin",
+  "Lady Geist","Lash","McGinnis","Mirage","Mo & Krill","Paradox","Pocket",
+  "Seven","Shiv","Sinclair","Vindicta","Viscous","Warden","Wraith","Yamato"
 ];
 
-const builds=[
-"Green (Vitality)",
-"Purple (Spirit)",
-"Orange (Gun)"
-];
+const builds=["Green (Vitality)","Purple (Spirit)","Orange (Gun)"];
+const souls=["800","1600","3200","6400"];
 
-const souls=[
-"800",
-"1600",
-"3200",
-"6400"
-];
+// ── All 154 standard shop items from deadlock.wiki (June 2026) ──
+const items = {
+  weapon: [
+    // T1 – 500
+    "Close Quarters","Extended Magazine","Headshot Booster","High-Velocity Rounds",
+    "Monster Rounds","Rapid Rounds","Restorative Shot",
+    // T2 – 1250
+    "Active Reload","Fleetfoot","Intensifying Magazine","Kinetic Dash","Long Range",
+    "Melee Charge","Mystic Shot","Opening Rounds","Recharging Rush","Slowing Bullets",
+    "Spirit Shredder Bullets","Split Shot","Stalker","Swift Striker","Titanic Magazine",
+    "Weakening Headshot",
+    // T3 – 3000
+    "Alchemical Fire","Ballistic Enchantment","Berserker","Blood Tribute","Burst Fire",
+    "Cultist Sacrifice","Escalating Resilience","Express Shot","Headhunter","Heroic Aura",
+    "Hollow Point","Hunter's Aura","Point Blank","Shadow Weave","Sharpshooter",
+    "Spirit Rend","Tesla Bullets","Toxic Bullets","Weighted Shots",
+    // T4 – 6200
+    "Armor Piercing Rounds","Capacitor","Crippling Headshot","Crushing Fists","Frenzy",
+    "Glass Cannon","Lucky Shot","Ricochet","Silencer","Spellslinger","Spiritual Overflow"
+  ],
+  vitality: [
+    // T1
+    "Extra Health","Extra Regen","Extra Stamina","Grit","Healing Rite",
+    "Melee Lifesteal","Rebuttal","Sprint Boots",
+    // T2
+    "Battle Vest","Bullet Lifesteal","Debuff Reducer","Enchanter's Emblem","Enduring Speed",
+    "Guardian Ward","Healbane","Healing Booster","Reactive Barrier","Restorative Locket",
+    "Return Fire","Spirit Lifesteal","Spirit Shielding","Trophy Collector","Weapon Shielding",
+    // T3
+    "Bullet Resilience","Counterspell","Dispel Magic","Fortitude","Fury Trance",
+    "Healing Nova","Lifestrike","Majestic Leap","Metal Skin","Rescue Beam",
+    "Spirit Resilience","Stamina Mastery","Veil Walker","Warp Stone",
+    // T4
+    "Cheat Death","Colossus","Divine Barrier","Diviner's Kevlar","Healing Tempo",
+    "Indomitable","Infuser","Inhibitor","Juggernaut","Leech","Phantom Strike",
+    "Plated Armor","Siphon Bullets","Spellbreaker","Unstoppable","Vampiric Burst","Witchmail"
+  ],
+  spirit: [
+    // T1
+    "Extra Charge","Extra Spirit","Golden Goose Egg","Mystic Burst","Mystic Expansion",
+    "Mystic Regeneration","Rusted Barrel","Spirit Strike",
+    // T2
+    "Arcane Surge","Bullet Resist Shredder","Cold Front","Compress Cooldown",
+    "Duration Extender","Improved Spirit","Mystic Slow","Mystic Vulnerability",
+    "Quicksilver Reload","Slowing Hex","Spirit Sap","Suppressor",
+    // T3
+    "Decay","Disarming Hex","Greater Expansion","Knockdown","Radiant Regeneration",
+    "Rapid Recharge","Silence Wave","Spirit Snatch","Superior Cooldown","Superior Duration",
+    "Surge of Power","Tankbuster","Torment Pulse",
+    // T4
+    "Arctic Blast","Boundless Spirit","Cursed Relic","Echo Shard","Escalating Exposure",
+    "Ethereal Shift","Focus Lens","Lightning Scroll","Magic Carpet","Mercurial Magnum",
+    "Mystic Reverb","Refresher","Scourge","Spirit Burn","Transcendent Cooldown","Vortex Web"
+  ]
+};
+
+let activeFilter = 'all';
+
+function setFilter(f){
+  activeFilter = f;
+  ['all','weapon','vitality','spirit'].forEach(k=>{
+    const btn = document.getElementById('f-'+k);
+    btn.className = 'filter-btn' + (k===f ? ` active-${k}` : '');
+  });
+}
 
 const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
 
 function tickSound(){
-const osc=audioCtx.createOscillator();
-const gain=audioCtx.createGain();
-osc.type="square";
-osc.frequency.value=700;
-osc.connect(gain);
-gain.connect(audioCtx.destination);
-gain.gain.setValueAtTime(.04,audioCtx.currentTime);
-gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.04);
-osc.start();
-osc.stop(audioCtx.currentTime+.04);
+  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+  osc.type="square"; osc.frequency.value=700;
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  gain.gain.setValueAtTime(.04,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.04);
+  osc.start(); osc.stop(audioCtx.currentTime+.04);
 }
 
 function winSound(){
-const osc=audioCtx.createOscillator();
-const gain=audioCtx.createGain();
-osc.type="triangle";
-osc.frequency.setValueAtTime(500,audioCtx.currentTime);
-osc.frequency.exponentialRampToValueAtTime(1200,audioCtx.currentTime+.18);
-osc.connect(gain);
-gain.connect(audioCtx.destination);
-gain.gain.setValueAtTime(.08,audioCtx.currentTime);
-gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.2);
-osc.start();
-osc.stop(audioCtx.currentTime+.2);
+  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+  osc.type="triangle";
+  osc.frequency.setValueAtTime(500,audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(1200,audioCtx.currentTime+.18);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  gain.gain.setValueAtTime(.08,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.2);
+  osc.start(); osc.stop(audioCtx.currentTime+.2);
 }
 
-function spinRoll(id,list){
-
-const el=document.getElementById(id);
-
-el.classList.add("spinning");
-
-const interval=setInterval(()=>{
-el.textContent=list[Math.floor(Math.random()*list.length)];
-tickSound();
-},35);
-
-setTimeout(()=>{
-clearInterval(interval);
-el.textContent=list[Math.floor(Math.random()*list.length)];
-el.classList.remove("spinning");
-winSound();
-},600);
-
+function spinRoll(id, list, callback){
+  const el=document.getElementById(id);
+  el.classList.add("spinning");
+  const interval=setInterval(()=>{
+    el.textContent=list[Math.floor(Math.random()*list.length)];
+    tickSound();
+  },35);
+  setTimeout(()=>{
+    clearInterval(interval);
+    const pick = list[Math.floor(Math.random()*list.length)];
+    el.textContent = pick;
+    el.classList.remove("spinning");
+    winSound();
+    if(callback) callback(pick);
+  },600);
 }
 
-function pickHero(){
-spinRoll("heroResult",heroes);
+function getItemPool(){
+  if(activeFilter==='all'){
+    return [
+      ...items.weapon.map(n=>({name:n,cat:'weapon'})),
+      ...items.vitality.map(n=>({name:n,cat:'vitality'})),
+      ...items.spirit.map(n=>({name:n,cat:'spirit'}))
+    ];
+  }
+  return items[activeFilter].map(n=>({name:n,cat:activeFilter}));
 }
 
-function pickBuild(){
-spinRoll("buildResult",builds);
+function pickItem(){
+  const pool = getItemPool();
+  const namePool = pool.map(i=>i.name);
+  const catEl = document.getElementById('itemCategory');
+
+  const el = document.getElementById('itemResult');
+  el.classList.add("spinning");
+  catEl.textContent = '';
+
+  const interval = setInterval(()=>{
+    const r = pool[Math.floor(Math.random()*pool.length)];
+    el.textContent = r.name;
+    el.className = `result item spinning cat-${r.cat}`;
+    tickSound();
+  },35);
+
+  setTimeout(()=>{
+    clearInterval(interval);
+    const pick = pool[Math.floor(Math.random()*pool.length)];
+    el.textContent = pick.name;
+    el.className = `result item cat-${pick.cat}`;
+    catEl.innerHTML = `<span class="item-category cat-${pick.cat}">${pick.cat}</span>`;
+    winSound();
+  },600);
 }
 
-function pickSouls(){
-spinRoll("soulsResult",souls);
-}
+function pickHero()  { spinRoll("heroResult",  heroes); }
+function pickBuild() { spinRoll("buildResult", builds); }
+function pickSouls() { spinRoll("soulsResult", souls);  }
 
 function rollAll(){
-pickHero();
-setTimeout(()=>pickBuild(),100);
-setTimeout(()=>pickSouls(),200);
+  pickHero();
+  setTimeout(()=>pickBuild(), 100);
+  setTimeout(()=>pickSouls(), 200);
+  setTimeout(()=>pickItem(),  300);
 }
-
-
-
-
-
-
 </script>
-
-
-
-
-
-
-
 </body>
-
-
-
 </html>
